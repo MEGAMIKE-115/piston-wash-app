@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function autenticado() {
+      return request.auth != null;
+    }
+
+    function datosUsuario() {
+      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data;
+    }
+
+    function esJefe() {
+      return autenticado() && datosUsuario().rol == "jefe";
+    }
+
+    function esEmpleado() {
+      return autenticado() && datosUsuario().rol == "empleado";
+    }
+
+    function esJefeOEmpleado() {
+      return esJefe() || esEmpleado();
+    }
+
+    match /clientes/{clienteId} {
+      allow read, write: if esJefeOEmpleado();
+    }
+
+    match /diagnosticos/{diagnosticoId} {
+      allow read, write: if esJefeOEmpleado();
+    }
+
+    match /contabilidad/{docId} {
+      allow read: if esJefe();
+      allow write: if false;
+    }
+
+    match /usuarios/{usuarioId} {
+      allow read: if autenticado() && (request.auth.uid == usuarioId || esJefe());
+      allow write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

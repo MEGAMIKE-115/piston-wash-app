@@ -3,13 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Piston Wash App</title>
+  <title>Piston Wash App - Iniciar sesión</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>Piston Wash 🚗🔧</h1>
-  <p>Bienvenido, aquí vivirá nuestra aplicación.</p>
+  <section id="login-screen" class="login-container">
+    <div class="login-card">
+
+      <div class="login-header">
+        <h1 class="logo-text">PISTON <span>WASH</span></h1>
+        <p class="tagline">Taller de Lavado &amp; Mecánica</p>
+      </div>
+
+      <form id="login-form" class="login-form" novalidate>
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" id="login-btn" class="btn-login">
+          <span class="btn-text">Iniciar sesión</span>
+        </button>
+
+        <p id="login-message" class="login-message" role="alert" aria-live="polite"></p>
+      </form>
+
+    </div>
+  </section>
+
+  <section id="dashboard-screen" class="dashboard-container" hidden>
+    <header class="dashboard-header">
+      <h1 class="dashboard-logo">PISTON <span>WASH</span></h1>
+      <button id="logout-btn" type="button" class="btn-logout">Cerrar sesión</button>
+    </header>
+
+    <main class="dashboard-main">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <p class="metric-label">Clientes registrados</p>
+          <p class="metric-value">0</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Motos atendidas</p>
+          <p class="metric-value">0</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Servicios este mes</p>
+          <p class="metric-value">0</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Ingresos este mes</p>
+          <p class="metric-value">$0</p>
+        </div>
+      </div>
+
+      <div class="actions-grid">
+        <button type="button" id="btn-nuevo-diagnostico" class="action-btn">Nuevo Diagnóstico</button>
+        <button type="button" class="action-btn">Base de Clientes</button>
+        <button type="button" class="action-btn">Historial de Servicios</button>
+      </div>
+    </main>
+  </section>
+
+  <section id="diagnostico-screen" class="diagnostico-container" hidden>
+    <header class="dashboard-header">
+      <h1 class="dashboard-logo">PISTON <span>WASH</span></h1>
+      <button id="volver-dashboard-btn" type="button" class="btn-logout">← Volver al Dashboard</button>
+    </header>
+
+    <main class="diagnostico-main">
+      <h2 class="section-title">Nuevo Diagnóstico</h2>
+
+      <div class="search-bar">
+        <input type="text" id="buscar-cliente" placeholder="Buscar cliente por teléfono o placa...">
+        <button type="button" id="buscar-cliente-btn" class="btn-search">Buscar</button>
+      </div>
+      <p id="buscar-mensaje" class="search-message" role="alert" aria-live="polite"></p>
+
+      <form id="diagnostico-form" class="diagnostico-form" novalidate>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="cliente-nombre">Nombre del cliente</label>
+            <input type="text" id="cliente-nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="cliente-telefono">Teléfono</label>
+            <input type="tel" id="cliente-telefono" required>
+          </div>
+          <div class="form-group">
+            <label for="moto-marca">Marca de la moto</label>
+            <input type="text" id="moto-marca" required>
+          </div>
+          <div class="form-group">
+            <label for="moto-modelo">Modelo de la moto</label>
+            <input type="text" id="moto-modelo" required>
+          </div>
+          <div class="form-group">
+            <label for="moto-placa">Placa</label>
+            <input type="text" id="moto-placa" required>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">Repuestos / Servicios</h3>
+        <div id="repuestos-list" class="repuestos-list"></div>
+        <button type="button" id="agregar-repuesto-btn" class="btn-add-row">+ Agregar repuesto/servicio</button>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="total-costo">Costo total</label>
+            <input type="number" id="total-costo" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label for="atendido-por">Atendido por</label>
+            <input type="text" id="atendido-por" readonly>
+          </div>
+        </div>
+
+        <button type="submit" id="guardar-diagnostico-btn" class="btn-login">
+          <span class="btn-text">Guardar diagnóstico</span>
+        </button>
+
+        <p id="diagnostico-mensaje" class="login-message" role="alert" aria-live="polite"></p>
+      </form>
+    </main>
+  </section>
 
 <script type="module" src="app.js"></script>
 </body>
