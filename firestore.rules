@@ -3,44 +3,171 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // ===== Quién es quién =====
+    // Jefe y empleado tienen un documento en «usuarios» (lo creas tú a mano). Los clientes no.
     function autenticado() {
       return request.auth != null;
     }
 
-    function datosUsuario() {
-      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data;
+    function tieneUsuario() {
+      return autenticado() &&
+        exists(/databases/$(database)/documents/usuarios/$(request.auth.uid));
+    }
+
+    function rolActual() {
+      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol;
     }
 
     function esJefe() {
-      return autenticado() && datosUsuario().rol == "jefe";
+      return tieneUsuario() && rolActual() == "jefe";
     }
 
     function esEmpleado() {
-      return autenticado() && datosUsuario().rol == "empleado";
+      return tieneUsuario() && rolActual() == "empleado";
     }
 
-    function esJefeOEmpleado() {
+    function esStaff() {
       return esJefe() || esEmpleado();
     }
 
-    match /clientes/{clienteId} {
-      allow read, write: if esJefeOEmpleado();
+    // El cliente es dueño de su propio documento (el id es su uid)
+    function esDueno(clienteId) {
+      return autenticado() && request.auth.uid == clienteId;
     }
 
-    match /diagnosticos/{diagnosticoId} {
-      allow read, write: if esJefeOEmpleado();
+    function contadoresEnCero() {
+      return request.resource.data.puntosDisponibles == 0 &&
+        request.resource.data.puntosAcumulados == 0 &&
+        request.resource.data.serviciosTotal == 0 &&
+        request.resource.data.totalGastado == 0;
     }
 
-    match /contabilidad/{docId} {
-      allow read: if esJefe();
-      allow write: if false;
-    }
-
+    // ===== Personal =====
     match /usuarios/{usuarioId} {
       allow read: if autenticado() && (request.auth.uid == usuarioId || esJefe());
       allow write: if false;
     }
 
+    // ===== Clientes (perfil + puntos) =====
+    // Los puntos solo los mueve el Jefe: ni el cliente ni el empleado pueden tocarlos.
+    match /clientes/{clienteId} {
+      allow read: if esStaff() || esDueno(clienteId);
+
+      allow create: if
+        esJefe()
+        || (esEmpleado() && request.resource.data.uid == null && contadoresEnCero())
+        || (esDueno(clienteId) &&
+            request.resource.data.uid == request.auth.uid &&
+            contadoresEnCero() &&
+            request.resource.data.keys().hasOnly(
+              ['uid', 'nombre', 'telefono', 'email', 'autorizaFotos',
+               'puntosDisponibles', 'puntosAcumulados', 'serviciosTotal', 'totalGastado', 'creado']));
+
+      allow update: if
+        esJefe()
+        || (esEmpleado() &&
+            request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['nombre', 'telefono', 'email', 'autorizaFotos']))
+        || (esDueno(clienteId) &&
+            request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['nombre', 'telefono', 'autorizaFotos']));
+
+      allow delete: if esJefe();
+    }
+
+    // ===== Vehículos y muebles =====
+    match /vehiculos/{vehiculoId} {
+      allow read: if esStaff() || (autenticado() && resource.data.clienteId == request.auth.uid);
+      allow create: if esStaff() ||
+        (autenticado() && request.resource.data.clienteId == request.auth.uid);
+      allow update: if esStaff() ||
+        (autenticado() &&
+         resource.data.clienteId == request.auth.uid &&
+         request.resource.data.clienteId == resource.data.clienteId);
+      allow delete: if esJefe() ||
+        (autenticado() && resource.data.clienteId == request.auth.uid);
+    }
+
+    // ===== Servicios / reportes (colección «diagnosticos») =====
+    match /diagnosticos/{servicioId} {
+      allow read: if esStaff() || (autenticado() && resource.data.clienteId == request.auth.uid);
+
+      // El empleado crea con pago «pendiente»; solo el Jefe puede crear ya confirmado
+      allow create: if esStaff() &&
+        request.resource.data.atendidoPorUid == request.auth.uid &&
+        (request.resource.data.estadoPago == 'pendiente' || esJefe());
+
+      // Confirmar pagos y editar: Jefe. El empleado solo marca recordatorios como enviados
+      allow update: if esJefe() ||
+        (esEmpleado() &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['recordatorioEnviado']));
+      allow delete: if esJefe();
+
+      // Fotos completas del antes y el después
+      match /fotos/{fotoId} {
+        allow read: if esStaff() ||
+          (autenticado() &&
+           get(/databases/$(database)/documents/diagnosticos/$(servicioId)).data.clienteId == request.auth.uid);
+        allow create: if esStaff();
+        allow update, delete: if esJefe();
+      }
+    }
+
+    // ===== Solicitudes de servicio =====
+    match /solicitudes/{solicitudId} {
+      allow read: if esStaff() || (autenticado() && resource.data.clienteId == request.auth.uid);
+      allow create: if autenticado() &&
+        request.resource.data.clienteId == request.auth.uid &&
+        request.resource.data.estado == 'nueva';
+      allow update: if esStaff() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado']);
+      allow delete: if false;
+    }
+
+    // ===== Catálogo y premios =====
+    match /servicios_catalogo/{id} {
+      allow read: if autenticado();
+      allow write: if esJefe();
+    }
+
+    match /premios/{id} {
+      allow read: if autenticado();
+      allow write: if esJefe();
+    }
+
+    // ===== Canjes de puntos =====
+    // El cliente solo puede pedir un canje si le alcanzan los puntos y el premio existe con ese costo.
+    // El Jefe lo entrega (ahí se descuentan los puntos).
+    match /canjes/{canjeId} {
+      allow read: if esStaff() || (autenticado() && resource.data.clienteId == request.auth.uid);
+      allow create: if autenticado() &&
+        request.resource.data.clienteId == request.auth.uid &&
+        request.resource.data.estado == 'pendiente' &&
+        exists(/databases/$(database)/documents/clientes/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/clientes/$(request.auth.uid)).data.puntosDisponibles
+          >= request.resource.data.puntos &&
+        exists(/databases/$(database)/documents/premios/$(request.resource.data.premioId)) &&
+        get(/databases/$(database)/documents/premios/$(request.resource.data.premioId)).data.puntos
+          == request.resource.data.puntos;
+      allow update: if esJefe();
+      allow delete: if false;
+    }
+
+    // ===== Galería pública (antes/después con autorización del cliente) =====
+    match /galeria/{id} {
+      allow read: if true;
+      allow create: if esStaff();
+      allow update: if false;
+      allow delete: if esJefe();
+    }
+
+    // ===== Contabilidad (reservada, solo lectura para el Jefe) =====
+    match /contabilidad/{docId} {
+      allow read: if esJefe();
+      allow write: if false;
+    }
+
+    // Todo lo demás, cerrado
     match /{document=**} {
       allow read, write: if false;
     }
