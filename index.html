@@ -2,138 +2,148 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Piston Wash App - Iniciar sesión</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MG Washers</title>
+  <meta name="description" content="MG Washers: lavado y detallado de carros, motos y muebles a domicilio en Fusagasugá.">
+  <meta name="theme-color" content="#1B2A4A">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="toast" role="status" aria-live="polite"></div>
 
-  <section id="login-screen" class="login-container">
-    <div class="login-card">
+  <!-- Cargando -->
+  <section id="pantalla-carga" class="pantalla-centro">
+    <p class="marca-grande">MG <span>WASHERS</span></p>
+    <p class="cargando">Cargando…</p>
+  </section>
 
-      <div class="login-header">
-        <h1 class="logo-text">PISTON <span>WASH</span></h1>
-        <p class="tagline">Taller de Lavado &amp; Mecánica</p>
+  <!-- Acceso: ingresar / crear cuenta -->
+  <section id="pantalla-acceso" class="pantalla-centro" hidden>
+    <div class="acceso-caja">
+      <header class="acceso-cabecera">
+        <p class="marca-grande">MG <span>WASHERS</span></p>
+        <p class="lema">Servicio de limpieza profesional</p>
+      </header>
+
+      <button type="button" class="btn btn-google btn-ancho" id="btn-google">
+        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+        Continuar con Google
+      </button>
+      <p class="separador"><span>o con tu correo</span></p>
+
+      <div class="pestanas" role="tablist" aria-label="Acceso">
+        <button type="button" role="tab" class="pestana" data-acceso-tab="ingresar" aria-selected="true">Ingresar</button>
+        <button type="button" role="tab" class="pestana" data-acceso-tab="registro" aria-selected="false">Crear cuenta</button>
       </div>
 
-      <form id="login-form" class="login-form" novalidate>
-        <div class="form-group">
-          <label for="email">Correo electrónico</label>
-          <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" required>
-        </div>
-
-        <div class="form-group">
-          <label for="password">Contraseña</label>
-          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
-        </div>
-
-        <button type="submit" id="login-btn" class="btn-login">
-          <span class="btn-text">Iniciar sesión</span>
-        </button>
-
-        <p id="login-message" class="login-message" role="alert" aria-live="polite"></p>
+      <form id="form-ingresar" class="stack" novalidate>
+        <div class="campo"><label for="ingresar-email">Correo electrónico</label>
+          <input type="email" id="ingresar-email" autocomplete="email" placeholder="tucorreo@ejemplo.com" required></div>
+        <div class="campo"><label for="ingresar-password">Contraseña</label>
+          <input type="password" id="ingresar-password" autocomplete="current-password" required></div>
+        <button type="submit" class="btn btn-primario btn-ancho" id="btn-ingresar">Ingresar</button>
+        <button type="button" class="link" id="btn-olvide">¿Olvidaste tu contraseña?</button>
       </form>
 
+      <form id="form-registro" class="stack" novalidate hidden>
+        <div class="campo"><label for="registro-email">Correo electrónico</label>
+          <input type="email" id="registro-email" autocomplete="email" placeholder="tucorreo@ejemplo.com" required></div>
+        <div class="campo"><label for="registro-password">Contraseña (mínimo 6 caracteres)</label>
+          <input type="password" id="registro-password" autocomplete="new-password" minlength="6" required></div>
+        <button type="submit" class="btn btn-primario btn-ancho" id="btn-registro">Crear mi cuenta</button>
+      </form>
+
+      <p id="msg-acceso" class="msg" role="alert"></p>
+    </div>
+
+    <section id="galeria-publica" class="galeria-publica" aria-labelledby="galeria-titulo" hidden>
+      <h2 id="galeria-titulo">Trabajos recientes</h2>
+      <div id="galeria-lista" class="galeria-lista"></div>
+    </section>
+  </section>
+
+  <!-- Completar perfil (primera vez) -->
+  <section id="pantalla-perfil" class="pantalla-centro" hidden>
+    <div class="acceso-caja">
+      <header class="acceso-cabecera">
+        <p class="marca-grande">MG <span>WASHERS</span></p>
+        <p class="lema">Un último paso para crear tu perfil</p>
+      </header>
+      <form id="form-perfil" class="stack" novalidate>
+        <div class="campo"><label for="perfil-nombre">Nombre completo</label>
+          <input type="text" id="perfil-nombre" autocomplete="name" required></div>
+        <div class="campo"><label for="perfil-telefono">Celular (10 dígitos)</label>
+          <input type="tel" id="perfil-telefono" inputmode="numeric" autocomplete="tel-national" placeholder="3001234567" required></div>
+        <label class="check"><input type="checkbox" id="perfil-fotos"><span>Autorizo que MG Washers muestre las fotos del antes y el después de mi vehículo (sin placa) en su galería. Es opcional.</span></label>
+        <button type="submit" class="btn btn-primario btn-ancho" id="btn-perfil-guardar">Guardar y entrar</button>
+        <p id="msg-perfil" class="msg" role="alert"></p>
+        <button type="button" class="link" id="btn-perfil-salir">Salir</button>
+      </form>
     </div>
   </section>
 
-  <section id="dashboard-screen" class="dashboard-container" hidden>
-    <header class="dashboard-header">
-      <h1 class="dashboard-logo">PISTON <span>WASH</span></h1>
-      <button id="logout-btn" type="button" class="btn-logout">Cerrar sesión</button>
-    </header>
-
-    <main class="dashboard-main">
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <p class="metric-label">Clientes registrados</p>
-          <p class="metric-value">0</p>
-        </div>
-        <div class="metric-card">
-          <p class="metric-label">Motos atendidas</p>
-          <p class="metric-value">0</p>
-        </div>
-        <div class="metric-card">
-          <p class="metric-label">Servicios este mes</p>
-          <p class="metric-value">0</p>
-        </div>
-        <div class="metric-card">
-          <p class="metric-label">Ingresos este mes</p>
-          <p class="metric-value">$0</p>
-        </div>
+  <!-- App del cliente -->
+  <div id="vista-cliente" class="app" hidden>
+    <header class="app-cabecera">
+      <div>
+        <p class="app-marca">MG WASHERS</p>
+        <p class="app-saludo" id="cliente-saludo">Hola</p>
       </div>
-
-      <div class="actions-grid">
-        <button type="button" id="btn-nuevo-diagnostico" class="action-btn">Nuevo Diagnóstico</button>
-        <button type="button" class="action-btn">Base de Clientes</button>
-        <button type="button" class="action-btn">Historial de Servicios</button>
-      </div>
-    </main>
-  </section>
-
-  <section id="diagnostico-screen" class="diagnostico-container" hidden>
-    <header class="dashboard-header">
-      <h1 class="dashboard-logo">PISTON <span>WASH</span></h1>
-      <button id="volver-dashboard-btn" type="button" class="btn-logout">← Volver al Dashboard</button>
-    </header>
-
-    <main class="diagnostico-main">
-      <h2 class="section-title">Nuevo Diagnóstico</h2>
-
-      <div class="search-bar">
-        <input type="text" id="buscar-cliente" placeholder="Buscar cliente por teléfono o placa...">
-        <button type="button" id="buscar-cliente-btn" class="btn-search">Buscar</button>
-      </div>
-      <p id="buscar-mensaje" class="search-message" role="alert" aria-live="polite"></p>
-
-      <form id="diagnostico-form" class="diagnostico-form" novalidate>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="cliente-nombre">Nombre del cliente</label>
-            <input type="text" id="cliente-nombre" required>
-          </div>
-          <div class="form-group">
-            <label for="cliente-telefono">Teléfono</label>
-            <input type="tel" id="cliente-telefono" required>
-          </div>
-          <div class="form-group">
-            <label for="moto-marca">Marca de la moto</label>
-            <input type="text" id="moto-marca" required>
-          </div>
-          <div class="form-group">
-            <label for="moto-modelo">Modelo de la moto</label>
-            <input type="text" id="moto-modelo" required>
-          </div>
-          <div class="form-group">
-            <label for="moto-placa">Placa</label>
-            <input type="text" id="moto-placa" required>
-          </div>
-        </div>
-
-        <h3 class="subsection-title">Repuestos / Servicios</h3>
-        <div id="repuestos-list" class="repuestos-list"></div>
-        <button type="button" id="agregar-repuesto-btn" class="btn-add-row">+ Agregar repuesto/servicio</button>
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="total-costo">Costo total</label>
-            <input type="number" id="total-costo" min="0" step="0.01">
-          </div>
-          <div class="form-group">
-            <label for="atendido-por">Atendido por</label>
-            <input type="text" id="atendido-por" readonly>
-          </div>
-        </div>
-
-        <button type="submit" id="guardar-diagnostico-btn" class="btn-login">
-          <span class="btn-text">Guardar diagnóstico</span>
+      <div class="app-cabecera-acciones">
+        <button type="button" class="icono-btn icono-btn-claro" id="btn-cliente-perfil" aria-label="Mi perfil">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
         </button>
+        <button type="button" class="icono-btn icono-btn-claro" id="btn-cliente-salir" aria-label="Cerrar sesión">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9"/></svg>
+        </button>
+      </div>
+    </header>
 
-        <p id="diagnostico-mensaje" class="login-message" role="alert" aria-live="polite"></p>
-      </form>
-    </main>
-  </section>
+    <main id="cliente-main" class="app-main"></main>
 
-<script type="module" src="app.js"></script>
+    <nav id="cliente-nav" class="nav-inferior" aria-label="Secciones">
+      <button type="button" data-vista="inicio">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button type="button" data-vista="vehiculos">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v-4l2-5h12l2 5v4"/><path d="M4 13h16"/><path d="M6 17v2M18 17v2"/></svg>
+        <span>Vehículos</span>
+      </button>
+      <button type="button" data-vista="puntos">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"/><path d="M12 13v4M9 20h6M10 17h4"/></svg>
+        <span>Puntos</span>
+      </button>
+      <button type="button" data-vista="solicitar">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>
+        <span>Solicitar</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Panel admin -->
+  <div id="vista-admin" class="app app-admin" hidden>
+    <header class="app-cabecera">
+      <div>
+        <p class="app-marca">MG WASHERS · PANEL</p>
+        <p class="app-saludo" id="admin-usuario"></p>
+      </div>
+      <button type="button" class="icono-btn icono-btn-claro" id="btn-admin-salir" aria-label="Cerrar sesión">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9"/></svg>
+      </button>
+    </header>
+    <nav id="admin-tabs" class="tabs" aria-label="Secciones del panel"></nav>
+    <main id="admin-main" class="app-main app-main-ancho"></main>
+  </div>
+
+  <div id="modal" class="modal-fondo" hidden></div>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
