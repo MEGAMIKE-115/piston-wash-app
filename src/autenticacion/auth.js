@@ -1,3 +1,10 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  AUTENTICACIÓN
+// ╚══════════════════════════════════════════════════════════════╝
+// QUÉ HACE:     Pantalla de acceso: ingresar, crear cuenta, Google, olvidé contraseña, completar perfil y cerrar sesión.
+// QUÉ CAMBIAR:  Textos de errores de acceso y campos del perfil nuevo.
+// CABLES A:     conexion/firebase.js · utilidades/util.js
+
 // Acceso: ingresar, crear cuenta (cliente), Google y completar perfil.
 // El personal (jefe/empleado) sigue entrando con las cuentas que creas a mano en Firebase.
 import {
@@ -12,8 +19,8 @@ import {
   GoogleAuthProvider,
   sendPasswordResetEmail,
   signOut,
-} from "./firebase.js";
-import { $, $$, mensajeEn, ocupado, normalizarTelefono, toast } from "./util.js";
+} from "../conexion/firebase.js";
+import { $, $$, mensajeEn, ocupado, normalizarTelefono, toast } from "../utilidades/util.js";
 
 export const salir = () => signOut(auth);
 

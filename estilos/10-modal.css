@@ -1,0 +1,55 @@
+/* ===== Modal ===== */
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(16, 24, 32, 0.6);
+}
+.modal-caja {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  max-height: 92vh;
+  border-radius: 20px 20px 0 0;
+  background: var(--cream);
+}
+.modal-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px 10px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-cuerpo {
+  padding: 16px 20px 28px;
+  overflow-y: auto;
+}
+
+@media (min-width: 640px) {
+  .modal-fondo {
+    align-items: center;
+  }
+  .modal-caja {
+    border-radius: 20px;
+  }
+  .nav-inferior {
+    left: 50%;
+    right: auto;
+    width: 560px;
+    transform: translateX(-50%);
+    border-radius: 16px 16px 0 0;
+    border: 1px solid var(--line);
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .fila-editable,
+  #le-nuevo {
+    grid-template-columns: 1fr;
+  }
+}

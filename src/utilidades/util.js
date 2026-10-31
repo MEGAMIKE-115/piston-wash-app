@@ -1,5 +1,12 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  UTILIDADES
+// ╚══════════════════════════════════════════════════════════════╝
+// QUÉ HACE:     Herramientas compartidas: seleccionar elementos, formatos de dinero/fecha, WhatsApp, rangos e insignias, avisos (toast) y ventanas (modal).
+// QUÉ CAMBIAR:  Función de rangos (infoNivel) e insignia (insigniaRango).
+// CABLES A:     configuracion/config.js
+
 // Utilidades compartidas: DOM, formatos, WhatsApp, niveles, imágenes y modal.
-import { NEGOCIO, NIVELES } from "./config.js";
+import { NEGOCIO, RANGOS, LEYENDA, PASO_LEYENDA } from "../configuracion/config.js";
 
 export const $ = (selector, raiz = document) => raiz.querySelector(selector);
 export const $$ = (selector, raiz = document) => [...raiz.querySelectorAll(selector)];
@@ -70,17 +77,47 @@ export function waLink(telefono, texto) {
 }
 export const waNegocio = (texto) => waLink(NEGOCIO.whatsapp, texto);
 
-// ===== Niveles =====
+// ===== Rangos (con divisiones y sin final) =====
+const ROMANO = ["III", "II", "I"];
+
+// Lista de pasos en orden. Cada paso: { id, rango, division, nombre, desde }
+function pasoNumero(n) {
+  // n = 0 es Leyenda 1
+  return { id: LEYENDA.id, rango: LEYENDA.nombre, division: String(n + 1), nombre: `${LEYENDA.nombre} ${n + 1}`, desde: LEYENDA.desde + n * PASO_LEYENDA };
+}
+const PASOS = RANGOS.flatMap((r) =>
+  r.desde.map((desde, i) => ({ id: r.id, rango: r.nombre, division: ROMANO[i], nombre: `${r.nombre} ${ROMANO[i]}`, desde }))
+);
+
 export function infoNivel(puntosAcumulados) {
-  const total = Number(puntosAcumulados) || 0;
-  let indice = 0;
-  NIVELES.forEach((n, i) => {
-    if (total >= n.desde) indice = i;
-  });
-  const actual = NIVELES[indice];
-  const siguiente = NIVELES[indice + 1] || null;
-  const pct = siguiente ? Math.min(100, Math.round(((total - actual.desde) / (siguiente.desde - actual.desde)) * 100)) : 100;
-  return { actual, siguiente, faltan: siguiente ? siguiente.desde - total : 0, pct };
+  const total = Math.max(0, Number(puntosAcumulados) || 0);
+  let actual;
+  let siguiente;
+  if (total >= LEYENDA.desde) {
+    const n = Math.floor((total - LEYENDA.desde) / PASO_LEYENDA);
+    actual = pasoNumero(n);
+    siguiente = pasoNumero(n + 1);
+  } else {
+    let indice = 0;
+    PASOS.forEach((p, i) => {
+      if (total >= p.desde) indice = i;
+    });
+    actual = PASOS[indice];
+    siguiente = PASOS[indice + 1] || { id: LEYENDA.id, rango: LEYENDA.nombre, division: "1", nombre: `${LEYENDA.nombre} 1`, desde: LEYENDA.desde };
+  }
+  const pct = Math.min(100, Math.max(0, Math.round(((total - actual.desde) / (siguiente.desde - actual.desde)) * 100)));
+  return { actual, siguiente, faltan: Math.max(0, siguiente.desde - total), pct, total };
+}
+
+// Insignia (escudo) del rango; el color sale de las variables --rango-* del contenedor.
+export function insigniaRango(paso, tam = 56) {
+  const texto = paso.division;
+  return `<svg class="insignia-rango" width="${tam}" height="${Math.round(tam * 1.125)}" viewBox="0 0 64 72" role="img" aria-label="Rango ${paso.nombre}">
+    <path d="M32 3 58 12v24c0 16-12 27-26 33C18 63 6 52 6 36V12z" fill="var(--rango-acento, #e3b04b)" stroke="rgba(255,255,255,.75)" stroke-width="2"/>
+    <path d="M32 9 52 16v20c0 12-9 21-20 26C21 57 12 48 12 36V16z" fill="var(--rango-2, #0a1a3a)"/>
+    <path d="m32 17 4.2 8.6 9.5 1.4-6.9 6.7 1.6 9.4L32 38.600l-8.400 4.500 1.600-9.400-6.900-6.700 9.500-1.400z" fill="var(--rango-acento, #e3b04b)"/>
+    <text x="32" y="58" text-anchor="middle" font-family="Sora, sans-serif" font-weight="700" font-size="${texto.length > 2 ? 11 : 13}" fill="var(--rango-acento, #e3b04b)">${texto}</text>
+  </svg>`;
 }
 
 // ===== Interfaz =====

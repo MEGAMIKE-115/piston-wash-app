@@ -1,13 +1,21 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  PUNTO DE ENTRADA
+// ╚══════════════════════════════════════════════════════════════╝
+// QUÉ HACE:     Arranca la app. Decide qué pantalla mostrar según quién inició sesión (jefe, empleado, cliente o cuenta nueva) y registra el service worker.
+// QUÉ CAMBIAR:  Aquí se cambia el orden de arranque y las pantallas de entrada.
+// CABLES A:     conexion/firebase.js (sesión) · autenticacion · cliente · admin · instalacion · galeria
+
 // MG Washers — punto de entrada. Decide qué pantalla ver según quién inició sesión:
 //   • jefe / empleado  → panel admin (tienen documento en la colección «usuarios»)
 //   • cliente          → su app (tiene documento en «clientes» con su mismo uid)
 //   • cuenta nueva     → completar perfil
-import { auth, db, doc, getDoc, onAuthStateChanged } from "./js/firebase.js";
-import { $, toast } from "./js/util.js";
-import { iniciarAcceso, iniciarPerfil, reiniciarAcceso } from "./js/auth.js";
-import { iniciarCliente } from "./js/cliente.js";
-import { iniciarAdmin } from "./js/admin.js";
-import { cargarGaleria } from "./js/galeria.js";
+import { auth, db, doc, getDoc, onAuthStateChanged } from "./conexion/firebase.js";
+import { $, toast } from "./utilidades/util.js";
+import { iniciarAcceso, iniciarPerfil, reiniciarAcceso } from "./autenticacion/auth.js";
+import { iniciarCliente } from "./cliente/cliente.js";
+import { iniciarAdmin } from "./admin/admin.js";
+import { iniciarInstalacion } from "./instalacion/instalar.js";
+import { cargarGaleria } from "./galeria/galeria.js";
 
 const pantallas = {
   carga: $("#pantalla-carga"),
@@ -60,3 +68,5 @@ onAuthStateChanged(auth, (user) => {
 if ("serviceWorker" in navigator && !["localhost", "127.0.0.1"].includes(location.hostname)) {
   navigator.serviceWorker.register("sw.js").catch((e) => console.warn("Service worker:", e));
 }
+
+iniciarInstalacion();

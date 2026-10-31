@@ -1,6 +1,13 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  REPORTES
+// ╚══════════════════════════════════════════════════════════════╝
+// QUÉ HACE:     Arma el informe del servicio (fotos antes/después, estado encontrado, recomendaciones), el PDF y el texto para WhatsApp.
+// QUÉ CAMBIAR:  Diseño y texto del informe.
+// CABLES A:     utilidades/util.js · configuracion/config.js
+
 // Reporte de servicio: lo usan el cliente (su historial) y el admin (al revisar).
-import { esc, cop, fechaLarga, aFecha, srcSeguro, ICONOS } from "./util.js";
-import { NEGOCIO } from "./config.js";
+import { esc, cop, fechaLarga, aFecha, srcSeguro, ICONOS } from "../utilidades/util.js";
+import { NEGOCIO } from "../configuracion/config.js";
 
 // Los servicios viejos (solo moto) tienen marca/modelo/placa sueltos
 export function nombreVehiculo(d) {

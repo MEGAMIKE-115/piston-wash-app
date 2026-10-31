@@ -1,7 +1,14 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  UTILIDADES · FOTOS
+// ╚══════════════════════════════════════════════════════════════╝
+// QUÉ HACE:     Lee y comprime las fotos de los servicios y las guarda en Firestore.
+// QUÉ CAMBIAR:  Tamaño y calidad de las fotos.
+// CABLES A:     conexion/firebase.js · utilidades/util.js
+
 // Fotos del antes y el después.
 // Se comprimen en el celular y se guardan en Firestore (así no necesitas Firebase Storage ni plan de pago).
 // Si algún día pasas a Blaze y quieres Storage, solo cambia las 3 funciones de este archivo.
-import { db, collection, doc, getDocs } from "./firebase.js";
+import { db, collection, doc, getDocs } from "../conexion/firebase.js";
 import { comprimirImagen } from "./util.js";
 
 export const MAX_FOTOS_POR_TIPO = 3;

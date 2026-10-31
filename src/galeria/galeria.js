@@ -1,6 +1,13 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  GALERÍA PÚBLICA
+// ╚══════════════════════════════════════════════════════════════╝
+// QUÉ HACE:     Muestra en la pantalla de acceso las fotos de servicios que los clientes autorizaron.
+// QUÉ CAMBIAR:  Cantidad de fotos y diseño de la galería.
+// CABLES A:     conexion/firebase.js · utilidades/util.js
+
 // Galería pública: antes/después de clientes que autorizaron mostrar sus fotos (sin placas).
-import { db, collection, getDocs, query, orderBy, limit } from "./firebase.js";
-import { $, esc, fechaCorta, srcSeguro } from "./util.js";
+import { db, collection, getDocs, query, orderBy, limit } from "../conexion/firebase.js";
+import { $, esc, fechaCorta, srcSeguro } from "../utilidades/util.js";
 
 export async function cargarGaleria() {
   const seccion = $("#galeria-publica");

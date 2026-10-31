@@ -1,3 +1,10 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  APP DEL CLIENTE
+// ╚══════════════════════════════════════════════════════════════╝
+// QUÉ HACE:     Las 4 pantallas del cliente: Inicio, Vehículos, Puntos y Solicitar, más su perfil. Aquí también se pintan el rango y los puntos del encabezado.
+// QUÉ CAMBIAR:  Textos y orden de las pantallas del cliente.
+// CABLES A:     conexion/firebase.js · configuracion/config.js · utilidades · reportes/reporte.js
+
 // Vista del cliente: inicio (feed), reporte, vehículos, puntos y solicitar servicio.
 import {
   db,
@@ -10,8 +17,8 @@ import {
   query,
   where,
   serverTimestamp,
-} from "./firebase.js";
-import { NEGOCIO, TIPOS_VEHICULO } from "./config.js";
+} from "../conexion/firebase.js";
+import { NEGOCIO, TIPOS_VEHICULO } from "../configuracion/config.js";
 import {
   $,
   $$,
@@ -22,6 +29,7 @@ import {
   fechaDeseadaTexto,
   primerNombre,
   infoNivel,
+  insigniaRango,
   normalizarPlaca,
   normalizarTelefono,
   srcSeguro,
@@ -33,10 +41,10 @@ import {
   abrirModal,
   cerrarModal,
   ICONOS,
-} from "./util.js";
-import { leerFotos } from "./fotos.js";
-import { salir } from "./auth.js";
-import { htmlReporte, accionesReporte, activarImpresion, nombreVehiculo, resumenServicios, textoCompartir, figuraFoto } from "./reporte.js";
+} from "../utilidades/util.js";
+import { leerFotos } from "../utilidades/fotos.js";
+import { salir } from "../autenticacion/auth.js";
+import { htmlReporte, accionesReporte, activarImpresion, nombreVehiculo, resumenServicios, textoCompartir, figuraFoto } from "../reportes/reporte.js";
 
 let ctx = null; // { user, perfil }
 let cache = {}; // servicios, vehiculos, catalogo, premios, canjes, solicitudes
@@ -106,16 +114,31 @@ async function irA(nombre, parametros = {}) {
 }
 
 // ===== Piezas compartidas =====
+// Pinta arriba (encabezado) el rango y los puntos, y colorea la app según el rango
+function pintarCabecera(perfil, nv) {
+  const app = document.getElementById("vista-cliente");
+  if (app) app.dataset.rango = nv.actual.id;
+  const chip = document.getElementById("cliente-puntos");
+  if (!chip) return;
+  chip.hidden = false;
+  chip.innerHTML = `${insigniaRango(nv.actual, 26)}<span><strong>${perfil.puntosDisponibles || 0}</strong> pts</span>`;
+  chip.onclick = () => irA("puntos");
+}
+
 function tarjetaNivel(perfil) {
   const nv = infoNivel(perfil.puntosAcumulados);
-  return `<section class="nivel-card" aria-label="Tu nivel y puntos">
-    <div class="nivel-top">
-      <span class="nivel-nombre">NIVEL ${esc(nv.actual.nombre.toUpperCase())}</span>
-      <span>${perfil.serviciosTotal || 0} servicios</span>
+  pintarCabecera(perfil, nv);
+  return `<section class="nivel-card" aria-label="Tu rango y puntos">
+    ${insigniaRango(nv.actual, 64)}
+    <div class="nivel-datos">
+      <div class="nivel-top">
+        <span class="nivel-nombre">${esc(nv.actual.nombre.toUpperCase())}</span>
+        <span>${perfil.serviciosTotal || 0} servicios</span>
+      </div>
+      <p class="nivel-puntos">${perfil.puntosDisponibles || 0} <small>puntos</small></p>
     </div>
-    <p class="nivel-puntos">${perfil.puntosDisponibles || 0} <small>puntos</small></p>
-    <div class="barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${nv.pct}" aria-label="Progreso al siguiente nivel"><span style="width:${nv.pct}%"></span></div>
-    <p class="nivel-nota">${nv.siguiente ? `${nv.faltan} puntos más para el nivel ${esc(nv.siguiente.nombre)}` : "Nivel máximo alcanzado"}</p>
+    <div class="barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${nv.pct}" aria-label="Progreso al siguiente rango"><span style="width:${nv.pct}%"></span></div>
+    <p class="nivel-nota">${nv.faltan} puntos más para ${esc(nv.siguiente.nombre)}</p>
   </section>`;
 }
 
@@ -215,10 +238,10 @@ function abrirModalVehiculo() {
       <div class="campo"><label for="veh-tipo">Tipo</label>
         <select id="veh-tipo">${TIPOS_VEHICULO.map((t) => `<option value="${t.id}">${esc(t.nombre)}</option>`).join("")}</select></div>
       <div class="grid-2">
-        <div class="campo"><label for="veh-marca">Marca</label><input id="veh-marca" type="text" autocomplete="off" placeholder="Mazda"></div>
-        <div class="campo"><label for="veh-modelo">Modelo</label><input id="veh-modelo" type="text" autocomplete="off" placeholder="3"></div>
+        <div class="campo"><label for="veh-marca">Marca</label><input id="veh-marca" type="text" maxlength="20" autocomplete="off" placeholder="Mazda"></div>
+        <div class="campo"><label for="veh-modelo">Modelo</label><input id="veh-modelo" type="text" maxlength="20" autocomplete="off" placeholder="3"></div>
       </div>
-      <div class="campo"><label for="veh-placa" id="veh-placa-label">Placa</label><input id="veh-placa" type="text" autocomplete="off" placeholder="ABC123"></div>
+      <div class="campo"><label for="veh-placa" id="veh-placa-label">Placa</label><input id="veh-placa" type="text" maxlength="10" autocomplete="off" placeholder="ABC123"></div>
       <p id="veh-msg" class="msg" role="alert"></p>
       <button type="submit" class="btn btn-primario" id="btn-veh-guardar">Guardar</button>
     </form>`
@@ -265,13 +288,21 @@ function insignias(perfil, servicios) {
 }
 
 async function vistaPuntos() {
-  const [perfil, premios, canjes, servicios] = await Promise.all([cargarPerfil(), cargarPremios(), cargarCanjes(true), cargarServicios()]);
+  const [perfil, premiosTodos, canjes, servicios, vehiculos] = await Promise.all([cargarPerfil(), cargarPremios(), cargarCanjes(true), cargarServicios(), cargarVehiculos()]);
+  const tipos = new Set(vehiculos.map((v) => v.tipo));
+  const esVisible = (p) =>
+    !p.tipo || p.tipo === "todos" || !tipos.size ||
+    (p.tipo === "moto" && tipos.has("moto")) ||
+    (p.tipo === "carro" && (tipos.has("carro") || tipos.has("camioneta"))) ||
+    (p.tipo === "mueble" && tipos.has("mueble"));
+  const premios = premiosTodos.filter(esVisible).sort((x, y) => (x.puntos || 0) - (y.puntos || 0));
   const reservados = canjes.filter((c) => c.estado === "pendiente").reduce((s, c) => s + (c.puntos || 0), 0);
   const libres = (perfil.puntosDisponibles || 0) - reservados;
 
   principal().innerHTML = `
     ${tarjetaNivel(perfil)}
     <h2 class="titulo-seccion">Premios</h2>
+    <p class="meta">Se canjean el día que pagues una lavada básica.</p>
     ${
       premios.length
         ? premios
@@ -363,14 +394,14 @@ async function vistaSolicitar({ servicio = "" } = {}) {
               }${catalogo
                 .map((c) => `<option value="${esc(c.nombre)}" ${c.nombre === servicio ? "selected" : ""}>${esc(c.nombre)} · ${cop(c.precio)}</option>`)
                 .join("")}<option value="Otro (cotizar por WhatsApp)">Otro (te cotizamos por WhatsApp)</option></select>`
-            : `<input id="sol-servicio" type="text" value="${esc(servicio)}" placeholder="¿Qué servicio necesitas?" autocomplete="off">`
+            : `<input id="sol-servicio" type="text" maxlength="60" value="${esc(servicio)}" placeholder="¿Qué servicio necesitas?" autocomplete="off">`
         }</div>
       <div class="grid-2">
         <div class="campo"><label for="sol-fecha">Fecha deseada</label><input id="sol-fecha" type="date" min="${minFecha}"></div>
         <div class="campo"><label for="sol-hora">Hora</label><input id="sol-hora" type="time"></div>
       </div>
-      <div class="campo"><label for="sol-direccion">Dirección</label><input id="sol-direccion" type="text" autocomplete="street-address" placeholder="Calle 10 # 5-20, barrio"></div>
-      <div class="campo"><label for="sol-notas">Notas (opcional)</label><textarea id="sol-notas" rows="2" placeholder="Ej: tiene manchas en el asiento trasero"></textarea></div>
+      <div class="campo"><label for="sol-direccion">Dirección</label><input id="sol-direccion" type="text" maxlength="80" autocomplete="street-address" placeholder="Calle 10 # 5-20, barrio"></div>
+      <div class="campo"><label for="sol-notas">Notas (opcional)</label><textarea id="sol-notas" rows="2" maxlength="200" placeholder="Ej: tiene manchas en el asiento trasero"></textarea></div>
       <p id="sol-msg" class="msg" role="alert"></p>
       <button type="submit" class="btn btn-primario btn-ancho" id="btn-solicitar">${ICONOS.whatsapp} Enviar solicitud</button>
       <p class="meta nota">Guardamos tu solicitud y se abre WhatsApp con el mensaje ya escrito.</p>
@@ -449,7 +480,7 @@ function abrirModalPerfil() {
   abrirModal(
     "Mi perfil",
     `<form id="form-mi-perfil" class="stack" novalidate>
-      <div class="campo"><label for="mp-nombre">Nombre</label><input id="mp-nombre" type="text" value="${esc(p.nombre)}" autocomplete="name"></div>
+      <div class="campo"><label for="mp-nombre">Nombre</label><input id="mp-nombre" type="text" maxlength="50" value="${esc(p.nombre)}" autocomplete="name"></div>
       <div class="campo"><label for="mp-telefono">Celular</label><input id="mp-telefono" type="tel" inputmode="numeric" value="${esc(p.telefono)}" autocomplete="tel"></div>
       <label class="check"><input type="checkbox" id="mp-fotos" ${p.autorizaFotos ? "checked" : ""}><span>Autorizo mostrar las fotos de mis servicios (sin placa) en la galería de MG Washers.</span></label>
       <p class="meta">Correo: ${esc(p.email)}</p>

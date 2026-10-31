@@ -1,0 +1,34 @@
+/* ===== Impresión / PDF del reporte ===== */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #reporte-doc,
+  #reporte-doc * {
+    visibility: visible;
+  }
+  #reporte-doc {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+  }
+  #modal,
+  .modal-caja,
+  .modal-cuerpo {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: none !important;
+  }
+  .reporte-total {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

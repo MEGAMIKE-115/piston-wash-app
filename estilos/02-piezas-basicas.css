@@ -1,0 +1,141 @@
+/* ===== Piezas básicas ===== */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+.meta {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+p.meta {
+  display: block;
+}
+.nota {
+  margin-top: 10px;
+  text-align: center;
+}
+.cargando {
+  padding: 28px 0;
+  text-align: center;
+  color: var(--muted);
+}
+.titulo-seccion {
+  margin: 22px 0 10px;
+  font-size: 1.1rem;
+  color: var(--navy);
+}
+.titulo-seccion .meta {
+  display: inline;
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  padding: 16px;
+  box-shadow: var(--sombra);
+}
+.card + .card,
+.servicio-card + .servicio-card {
+  margin-top: 12px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.campo label,
+fieldset legend {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+.campo label input {
+  margin-top: 6px;
+  font-weight: 400;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #ffffff;
+  transition: border-color 0.15s;
+}
+textarea {
+  resize: vertical;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(8, 112, 136, 0.3);
+}
+fieldset {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+.check input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  accent-color: var(--navy);
+}
+.check-fila {
+  align-items: center;
+  min-height: 48px;
+  padding: 6px 12px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #ffffff;
+}
+.check-fila span {
+  flex: 1;
+}
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msg {
+  min-height: 1.2em;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+.msg.error {
+  color: var(--danger);
+}
+.msg.ok {
+  color: var(--ok-texto);
+}

@@ -1,0 +1,81 @@
+/* ===== Tema v6: azul profundo + dorado del logo ===== */
+:root {
+  --navy: #0a1a3a;
+  --navy-2: #132b5c;
+  --gold: #e3b04b;
+  --gold-2: #f3ce78;
+  --cream: #f4f1e8;
+  --teal: #1f5fae;
+  --cyan: #38c6ee;
+  --ink: #0f1b33;
+  --muted: #5a6579;
+  --line: #e1ddcf;
+  --ok-fondo: #e3eefb;
+  --ok-texto: #12427e;
+  --sombra: 0 2px 10px rgba(10, 26, 58, 0.07);
+}
+:focus-visible { outline-color: var(--teal); }
+input:focus, select:focus, textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(31, 95, 174, 0.22); }
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="date"], input[type="time"], select, textarea { border-color: #d9d4c3; }
+
+.btn-primario, .btn-gold {
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  color: var(--navy);
+  box-shadow: 0 4px 12px rgba(227, 176, 75, 0.35);
+}
+.btn-primario:hover:not(:disabled), .btn-gold:hover:not(:disabled) { background: linear-gradient(135deg, #f7d78a, #eab94f); }
+.btn-secundario { border-color: var(--navy-2); color: var(--navy-2); }
+.link { color: var(--teal); }
+
+.logo-grande { width: 120px; height: 120px; border-radius: 28px; object-fit: cover; margin: 0 auto; box-shadow: 0 8px 28px rgba(0,0,0,.35); }
+#pantalla-carga .logo-grande { width: 150px; height: 150px; }
+.pantalla-centro { background: radial-gradient(120% 80% at 50% 0%, var(--navy-2), var(--navy) 70%); }
+.acceso-caja { border-top: 0; border-radius: 24px; }
+.acceso-cabecera { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+
+.app-cabecera {
+  justify-content: flex-start;
+  gap: 12px;
+  padding: calc(14px + env(safe-area-inset-top)) 16px 26px;
+  background: radial-gradient(120% 140% at 0% 0%, var(--navy-2), var(--navy) 70%);
+  color: #fff;
+  border-radius: 0 0 28px 28px;
+}
+.app-logo { flex: none; width: 48px; height: 48px; border-radius: 14px; object-fit: cover; box-shadow: 0 0 0 2px rgba(227,176,75,.6); }
+.app-titulos { flex: 1; min-width: 0; }
+.app-marca { color: var(--gold); }
+.app-saludo { color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.icono-btn-claro { color: #dbe4f5; }
+.icono-btn-claro:hover { background: rgba(255,255,255,.12); }
+
+.app-main { padding-top: 18px; }
+.nivel-card {
+  background: linear-gradient(140deg, var(--navy-2), var(--navy));
+  border: 1px solid rgba(227, 176, 75, 0.4);
+  box-shadow: 0 12px 28px rgba(10, 26, 58, 0.3);
+  color: #fff;
+}
+.nivel-nombre { color: var(--gold-2); }
+.nivel-puntos small, .nivel-nota { color: #b6c3de; }
+.barra { background: rgba(255, 255, 255, 0.14); }
+.barra span { background: linear-gradient(90deg, var(--gold), var(--gold-2)); box-shadow: 0 0 10px rgba(243, 206, 120, 0.6); }
+.titulo-seccion { color: var(--navy); }
+.badge-nivel { background: var(--navy); color: var(--gold-2); }
+
+.nav-inferior {
+  left: 12px;
+  right: 12px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  max-width: 536px;
+  margin: 0 auto;
+  padding: 6px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--navy);
+  box-shadow: 0 10px 30px rgba(10, 26, 58, 0.4);
+}
+.nav-inferior button { min-height: 56px; border-radius: 18px; color: #8fa3c7; }
+.nav-inferior button[aria-current="page"] { color: var(--gold-2); background: rgba(227, 176, 75, 0.16); box-shadow: none; }
+.app-main { padding-bottom: 120px; }
+.banner-instalar { bottom: calc(92px + env(safe-area-inset-bottom)); }
+.tabs { background: var(--navy-2); }

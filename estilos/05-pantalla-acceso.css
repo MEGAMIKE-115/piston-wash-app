@@ -1,0 +1,124 @@
+/* ===== Pantallas de entrada ===== */
+.pantalla-centro {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px 16px;
+  background: var(--navy);
+}
+.marca-grande {
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+  text-align: center;
+}
+.marca-grande span {
+  color: var(--gold);
+}
+#pantalla-carga .cargando {
+  color: var(--cream);
+}
+.acceso-caja {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px 24px;
+  border-top: 5px solid var(--gold);
+  border-radius: var(--radio);
+  background: var(--cream);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+.acceso-caja .marca-grande {
+  color: var(--navy);
+  font-size: 1.7rem;
+}
+.acceso-caja .marca-grande span {
+  color: #065669;
+}
+.lema {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.separador {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.separador::before,
+.separador::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.pestanas {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: #e4e7e2;
+}
+.pestana {
+  flex: 1;
+  min-height: 44px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+}
+.pestana[aria-selected="true"] {
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.galeria-publica {
+  width: 100%;
+  max-width: 760px;
+}
+.galeria-publica h2 {
+  margin-bottom: 12px;
+  color: var(--cream);
+  text-align: center;
+}
+.galeria-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.galeria-item {
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--cream);
+}
+.galeria-par {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.galeria-par img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.galeria-item figcaption {
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--navy);
+}

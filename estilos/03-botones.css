@@ -1,0 +1,93 @@
+/* ===== Botones ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.15s;
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-primario {
+  background: var(--teal);
+  color: #fff;
+}
+.btn-primario:hover:not(:disabled) {
+  background: #065669;
+}
+.btn-secundario {
+  background: transparent;
+  border-color: var(--navy);
+  color: var(--navy);
+}
+.btn-secundario:hover:not(:disabled) {
+  background: rgba(16, 24, 32, 0.06);
+}
+.btn-gold {
+  background: var(--gold);
+  color: var(--navy);
+}
+.btn-gold:hover:not(:disabled) {
+  background: #f6c35f;
+}
+.btn-peligro {
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.btn-google {
+  background: #fff;
+  border-color: var(--line);
+  color: var(--ink);
+}
+.btn-ancho {
+  width: 100%;
+}
+.btn-chico {
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 0.9rem;
+}
+.link {
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--teal);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 4px;
+  text-align: left;
+  cursor: pointer;
+}
+.icono-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--navy);
+  cursor: pointer;
+}
+.icono-btn-claro {
+  color: var(--ink);
+}
+.icono-btn:hover {
+  background: rgba(127, 127, 127, 0.18);
+}

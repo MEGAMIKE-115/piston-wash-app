@@ -1,0 +1,103 @@
+/* ===== Reporte ===== */
+.reporte {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  background: var(--paper);
+  box-shadow: var(--sombra);
+}
+.reporte-marca {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #065669;
+}
+.reporte-cabecera h2 {
+  margin: 4px 0;
+  font-size: 1.3rem;
+  color: var(--navy);
+}
+.reporte-cabecera p:last-child {
+  margin-top: 8px;
+}
+.reporte-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--navy);
+  color: var(--cream);
+}
+.reporte-total strong {
+  font-family: var(--fuente-titulo);
+  font-size: 1.4rem;
+  color: var(--gold);
+}
+.reporte-puntos {
+  font-weight: 700;
+  color: var(--ok-texto);
+}
+.reporte-fotos h4 {
+  margin-bottom: 8px;
+}
+.reporte-fotos-fila {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+.reporte-fotos .ad-foto img {
+  border-radius: 10px;
+}
+.reporte-fotos .ad-etiqueta {
+  display: none;
+}
+.reporte-seccion h3 {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--gold);
+  color: var(--navy);
+}
+.detalle,
+.recos,
+.lista-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+.detalle li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.texto-libre {
+  white-space: pre-line;
+}
+.reco {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.reco strong {
+  display: block;
+}
+.reporte-pie {
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.acciones-reporte {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.acciones-reporte .btn {
+  flex: 1 1 200px;
+}

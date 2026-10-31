@@ -1,0 +1,7 @@
+/* Textos largos nunca se salen del recuadro */
+.card, .servicio-card, .premio-fila, .meta, h3, p, strong {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.card, .servicio-card { max-width: 100%; min-width: 0; }
+body { overflow-x: hidden; }

@@ -5,21 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>MG Washers</title>
   <meta name="description" content="MG Washers: lavado y detallado de carros, motos y muebles a domicilio en Fusagasugá.">
-  <meta name="theme-color" content="#1B2A4A">
+  <meta name="theme-color" content="#0A1A3A">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon-192.png" type="image/png">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="assets/iconos/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/iconos/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <!-- ESTILOS (el orden importa: cada archivo puede ajustar al anterior) -->
+  <link rel="stylesheet" href="estilos/01-variables-y-base.css">
+  <link rel="stylesheet" href="estilos/02-piezas-basicas.css">
+  <link rel="stylesheet" href="estilos/03-botones.css">
+  <link rel="stylesheet" href="estilos/04-insignias-y-avisos.css">
+  <link rel="stylesheet" href="estilos/05-pantalla-acceso.css">
+  <link rel="stylesheet" href="estilos/06-estructura-app.css">
+  <link rel="stylesheet" href="estilos/07-cliente.css">
+  <link rel="stylesheet" href="estilos/08-reporte.css">
+  <link rel="stylesheet" href="estilos/09-panel-admin.css">
+  <link rel="stylesheet" href="estilos/10-modal.css">
+  <link rel="stylesheet" href="estilos/11-impresion-pdf.css">
+  <link rel="stylesheet" href="estilos/12-textos-largos.css">
+  <link rel="stylesheet" href="estilos/13-aviso-instalar.css">
+  <link rel="stylesheet" href="estilos/14-tema-azul-dorado.css">
+  <link rel="stylesheet" href="estilos/15-rangos-y-colores.css">
 </head>
 <body>
   <div id="toast" role="status" aria-live="polite"></div>
 
   <!-- Cargando -->
   <section id="pantalla-carga" class="pantalla-centro">
-    <p class="marca-grande">MG <span>WASHERS</span></p>
+    <img class="logo-grande" src="assets/iconos/logo-grande.png" alt="MG Washers" width="150" height="150">
     <p class="cargando">Cargando…</p>
   </section>
 
@@ -27,7 +42,7 @@
   <section id="pantalla-acceso" class="pantalla-centro" hidden>
     <div class="acceso-caja">
       <header class="acceso-cabecera">
-        <p class="marca-grande">MG <span>WASHERS</span></p>
+        <img class="logo-grande" src="assets/iconos/logo-grande.png" alt="MG Washers" width="120" height="120">
         <p class="lema">Servicio de limpieza profesional</p>
       </header>
 
@@ -72,7 +87,7 @@
   <section id="pantalla-perfil" class="pantalla-centro" hidden>
     <div class="acceso-caja">
       <header class="acceso-cabecera">
-        <p class="marca-grande">MG <span>WASHERS</span></p>
+        <img class="logo-grande" src="assets/iconos/logo-grande.png" alt="MG Washers" width="120" height="120">
         <p class="lema">Un último paso para crear tu perfil</p>
       </header>
       <form id="form-perfil" class="stack" novalidate>
@@ -91,10 +106,12 @@
   <!-- App del cliente -->
   <div id="vista-cliente" class="app" hidden>
     <header class="app-cabecera">
-      <div>
+      <img class="app-logo" src="assets/iconos/logo.png" alt="" width="48" height="48">
+      <div class="app-titulos">
         <p class="app-marca">MG WASHERS</p>
         <p class="app-saludo" id="cliente-saludo">Hola</p>
       </div>
+      <button type="button" class="chip-puntos" id="cliente-puntos" aria-label="Mis puntos" hidden></button>
       <div class="app-cabecera-acciones">
         <button type="button" class="icono-btn icono-btn-claro" id="btn-cliente-perfil" aria-label="Mi perfil">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
@@ -130,7 +147,8 @@
   <!-- Panel admin -->
   <div id="vista-admin" class="app app-admin" hidden>
     <header class="app-cabecera">
-      <div>
+      <img class="app-logo" src="assets/iconos/logo.png" alt="" width="48" height="48">
+      <div class="app-titulos">
         <p class="app-marca">MG WASHERS · PANEL</p>
         <p class="app-saludo" id="admin-usuario"></p>
       </div>
@@ -144,6 +162,7 @@
 
   <div id="modal" class="modal-fondo" hidden></div>
 
-  <script type="module" src="app.js"></script>
+  <!-- CÓDIGO: arranca en src/main.js -->
+  <script type="module" src="src/main.js"></script>
 </body>
 </html>

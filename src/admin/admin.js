@@ -1,3 +1,10 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  PANEL JEFE / EMPLEADO
+// ╚══════════════════════════════════════════════════════════════╝
+// QUÉ HACE:     El panel de administración: nuevo servicio, clientes, solicitudes, recordatorios, ingresos, premios y catálogo. Cada pestaña es una función vistaXxx().
+// QUÉ CAMBIAR:  Una pestaña nueva = agregarla en la lista de pestañas y crear su función vista.
+// CABLES A:     conexion/firebase.js · configuracion/config.js · utilidades · reportes/reporte.js
+
 // Panel del personal. Empleado: servicios, clientes, solicitudes y recordatorios.
 // Jefe: además premios/canjes, ingresos (con confirmación de pagos) y catálogo.
 import {
@@ -18,8 +25,8 @@ import {
   increment,
   writeBatch,
   runTransaction,
-} from "./firebase.js";
-import { NEGOCIO, PUNTOS_POR_PESOS, TIPOS_VEHICULO, METODOS_PAGO, CATALOGO_INICIAL } from "./config.js";
+} from "../conexion/firebase.js";
+import { NEGOCIO, PUNTOS_POR_PESOS, TIPOS_VEHICULO, METODOS_PAGO, CATALOGO_INICIAL, PREMIOS_INICIALES } from "../configuracion/config.js";
 import {
   $,
   $$,
@@ -41,10 +48,10 @@ import {
   abrirModal,
   cerrarModal,
   ICONOS,
-} from "./util.js";
-import { prepararFoto, agregarFotosAlBatch, leerFotos, MAX_FOTOS_POR_TIPO } from "./fotos.js";
-import { salir } from "./auth.js";
-import { htmlReporte, accionesReporte, activarImpresion, nombreVehiculo, resumenServicios, textoCompartir, partesDe } from "./reporte.js";
+} from "../utilidades/util.js";
+import { prepararFoto, agregarFotosAlBatch, leerFotos, MAX_FOTOS_POR_TIPO } from "../utilidades/fotos.js";
+import { salir } from "../autenticacion/auth.js";
+import { htmlReporte, accionesReporte, activarImpresion, nombreVehiculo, resumenServicios, textoCompartir, partesDe } from "../reportes/reporte.js";
 
 let ctx = null; // { user, rol, nombre }
 let catalogoCache = null;
@@ -931,7 +938,7 @@ async function vistaCatalogo() {
     campoNumero: "precio",
     etiquetaNumero: "Precio (COP)",
     items,
-    vacio: `<p>El catálogo está vacío.</p><button type="button" class="btn btn-primario" id="cat-cargar">Cargar catálogo inicial</button><p class="meta">Son precios de referencia de Fusagasugá. Puedes editarlos después.</p>`,
+    vacio: `<p>El catálogo está vacío.</p><button type="button" class="btn btn-primario" id="cat-cargar">Cargar catálogo inicial</button><p class="meta">Precios reales de MG Washers (el cliente pone el agua). Puedes editarlos después.</p>`,
     alCambiar: () => irATab("catalogo"),
   });
   const cargar = $("#cat-cargar");
@@ -995,10 +1002,27 @@ async function vistaPremios() {
     campoNumero: "puntos",
     etiquetaNumero: "Puntos",
     items: premios,
-    vacio: `<p>Aún no hay premios. Crea el primero arriba (ej: «Polichada gratis» por 200 puntos).</p>`,
+    vacio: `<p>Aún no hay premios.</p><button type="button" class="btn btn-primario" id="prem-cargar">Cargar premios iniciales</button><p class="meta">Los de moto y carro por 150, 250, 300 y 400 puntos. Los puedes editar después.</p>`,
     extraArriba: arriba,
     alCambiar: () => irATab("premios"),
   });
+
+  const cargarPremiosIni = $("#prem-cargar");
+  if (cargarPremiosIni) {
+    cargarPremiosIni.onclick = async () => {
+      await ocupado(cargarPremiosIni, "Cargando...", async () => {
+        try {
+          const batch = writeBatch(db);
+          PREMIOS_INICIALES.forEach((p) => batch.set(doc(collection(db, "premios")), { ...p, activo: true }));
+          await batch.commit();
+          irATab("premios");
+        } catch (error) {
+          console.error(error);
+          toast("No se pudieron cargar los premios.", "error");
+        }
+      });
+    };
+  }
 
   $$("[data-entregar]", zona()).forEach((b) => {
     b.onclick = async () => {

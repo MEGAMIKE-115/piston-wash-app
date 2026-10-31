@@ -1,0 +1,182 @@
+/* ===== Cliente ===== */
+.nivel-card {
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: var(--navy);
+  color: var(--cream);
+  box-shadow: var(--sombra);
+}
+.nivel-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+.nivel-nombre {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+}
+.nivel-puntos {
+  margin-top: 4px;
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  font-size: 2.2rem;
+}
+.nivel-puntos small {
+  font-family: var(--fuente);
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #aeb8c2;
+}
+.barra {
+  height: 8px;
+  margin-top: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #2b3946;
+}
+.barra span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--gold);
+}
+.nivel-nota {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #aeb8c2;
+}
+
+.servicio-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  background: var(--paper);
+  box-shadow: var(--sombra);
+}
+.servicio-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+.servicio-card .servicio-cabecera {
+  padding: 14px 16px 12px;
+}
+.servicio-pie {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  min-height: 52px;
+}
+.antes-despues {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.ad-foto {
+  position: relative;
+  margin: 0;
+}
+.ad-foto img,
+.ad-vacio {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.ad-vacio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e4e7e2;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.ad-etiqueta {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.ad-etiqueta.antes {
+  background: var(--navy);
+  color: var(--cream);
+}
+.ad-etiqueta.despues {
+  background: var(--teal);
+  color: var(--navy);
+}
+
+.vehiculo-card {
+  margin-bottom: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  background: var(--paper);
+  box-shadow: var(--sombra);
+}
+.placa {
+  display: inline-block;
+  margin: 6px 0;
+  padding: 2px 10px;
+  border: 2px solid var(--navy);
+  border-radius: 6px;
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.premio-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  background: var(--paper);
+}
+.premio-fila strong {
+  display: block;
+}
+.faltan {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+.insignias {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+.insignia {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+}
+.insignia-circulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e4e7e2;
+  font-size: 1.1rem;
+}
+.insignia.lograda {
+  color: var(--ink);
+  font-weight: 700;
+}
+.insignia.lograda .insignia-circulo {
+  background: var(--gold);
+  color: var(--navy);
+}
